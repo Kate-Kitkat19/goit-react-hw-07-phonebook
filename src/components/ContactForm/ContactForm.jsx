@@ -4,12 +4,17 @@ import { PropTypes } from 'prop-types';
 import { Button } from './ContactForm.styled';
 import { StyledForm, FormInput, Label, ErrorText } from './ContactForm.styled';
 import { ValidationSchema } from './Validation';
+import { useSelector, useDispatch } from 'react-redux';
+import { addContact } from 'redux/store';
 
 export const ContactForm = ({ onSubmit }) => {
   const INITIAL_VALUES = {
     name: '',
     number: '',
   };
+
+  const value = useSelector(state => state.myValue);
+  const dispatch = useDispatch();
 
   return (
     <Formik
@@ -29,6 +34,10 @@ export const ContactForm = ({ onSubmit }) => {
           <ErrorMessage name="number" component={ErrorText}></ErrorMessage>
         </Label>
         <Button type="submit">Add contact</Button>
+        <button type="button" onClick={() => dispatch(addContact(1))}>
+          {' '}
+          Click on me! {value}
+        </button>
       </StyledForm>
     </Formik>
   );
