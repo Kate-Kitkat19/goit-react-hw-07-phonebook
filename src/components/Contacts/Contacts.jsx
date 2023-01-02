@@ -1,7 +1,9 @@
 import { PropTypes } from 'prop-types';
 import { ContactCard } from '../ContactCard/ContactCard';
-import {List, ListItem} from './Contacts.styled'
-export const Contacts = ({ contacts, onDelete }) => {
+import {List, ListItem} from './Contacts.styled';
+import { deleteContact } from 'redux/contactsSlice';
+
+export const Contacts = ({ contacts }) => {
   return (
     <List>
       {contacts.map(({ name, number, id }) => {
@@ -11,7 +13,7 @@ export const Contacts = ({ contacts, onDelete }) => {
               name={name}
               number={number}
               id={id}
-              onDelete={() => onDelete(id)}
+              onDelete={() => deleteContact(id)}
             />
           </ListItem>
         );

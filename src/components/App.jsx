@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ContactForm from './ContactForm/ContactForm';
 import { Layout } from './Layout.styled';
 import { Contacts } from './Contacts/Contacts';
@@ -7,25 +7,15 @@ import { nanoid } from 'nanoid';
 import { Title } from './Contacts/Contacts.styled';
 import { localStore } from './local-storage';
 import { useEffect } from 'react';
+import { getContacts, getFilter } from 'redux/selectors';
+import { addContact } from 'redux/contactsSlice';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
-
-  useEffect(() => {
-    const savedContacts = localStore.load(KEY);
-    if (savedContacts) {
-      setContacts(savedContacts);
-    }
-  }, []);
+  const contacts = getContacts();
 
   useEffect(() => {
     localStore.save(KEY, contacts);
   }, [contacts]);
-
-  const saveContactInState = data => {
-    setContacts(prevContacts => [...prevContacts, data]);
-  };
 
   const handleSubmit = (values, { resetForm }) => {
     const contactName = values.name.toLowerCase();
@@ -35,37 +25,27 @@ export const App = () => {
     if (isSaved) {
       alert(`${values.name} is already in contacts`);
     } else {
-      saveContactInState({ ...values, id: nanoid() });
+      addContact({ ...values, id: nanoid() });
     }
     resetForm();
   };
 
-  const filterContacts = evt => {
-    const value = evt.target.value;
-    setFilter(value.trim().toLowerCase());
-  };
-
-  const deleteContact = id => {
-    setContacts(prevState => prevState.filter(contact => contact.id !== id));
-  };
 
   const KEY = 'savedContacts';
-
   const filteredContacts = contacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter)
+    contact.name.toLowerCase().includes(getFilter())
   );
 
   return (
     <Layout>
       <ContactForm onSubmit={handleSubmit}></ContactForm>
-      <Filter onFilterChange={filterContacts} filterValue={filter}></Filter>
+      <Filter></Filter>
 
       {filteredContacts.length > 0 && (
         <>
           <Title>Contacts</Title>
           <Contacts
             contacts={filteredContacts}
-            onDelete={deleteContact}
           ></Contacts>
         </>
       )}
