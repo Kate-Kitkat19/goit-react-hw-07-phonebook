@@ -1,19 +1,39 @@
 import { Formik, ErrorMessage } from 'formik';
 import React from 'react';
-import { PropTypes } from 'prop-types';
 import { Button } from './ContactForm.styled';
 import { StyledForm, FormInput, Label, ErrorText } from './ContactForm.styled';
 import { ValidationSchema } from './Validation';
+import { useDispatch, useSelector } from 'react-redux';
+import { getContacts } from 'redux/selectors';
+import { nanoid } from 'nanoid';
+import { addContact } from 'redux/contactsSlice';
 
-export const ContactForm = ({ onSubmit }) => {
+export const ContactForm = () => {
   const INITIAL_VALUES = {
     name: '',
     number: '',
   };
 
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
+  const handleSubmit = (values, { resetForm }) => {
+    console.log('This is handle submit!!!');
+    const contactName = values.name.toLowerCase();
+    const isSaved = contacts.find(
+      contact => contact.name.toLowerCase() === contactName
+    );
+    if (isSaved) {
+      alert(`${values.name} is already in contacts`);
+    } else {
+      dispatch(addContact({ ...values, id: nanoid() }));
+    }
+    resetForm();
+  };
+
   return (
     <Formik
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
       validationSchema={ValidationSchema}
       initialValues={{ ...INITIAL_VALUES }}
     >
@@ -32,10 +52,6 @@ export const ContactForm = ({ onSubmit }) => {
       </StyledForm>
     </Formik>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ContactForm;

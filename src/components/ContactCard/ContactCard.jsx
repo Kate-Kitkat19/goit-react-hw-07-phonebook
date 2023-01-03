@@ -17,6 +17,5 @@ export const ContactCard = ({ name, number, onDelete }) => {
 ContactCard.propTypes = {
   name: PropTypes.string.isRequired,
   number: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
 };

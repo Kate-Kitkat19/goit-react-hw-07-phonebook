@@ -10,7 +10,7 @@ export const Filter = () => {
 
   function handleUpdate(evt) {
     const query = evt.target.value;
-    console.log(query);
+    console.log(query, 'query in handleUpdate');
     dispatch(updateFilter(query));
   }
 
@@ -25,4 +25,3 @@ export const Filter = () => {
     </StyledLabel>
   );
 };
-
