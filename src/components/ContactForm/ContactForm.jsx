@@ -18,7 +18,6 @@ export const ContactForm = () => {
   const contacts = useSelector(getContacts);
 
   const handleSubmit = (values, { resetForm }) => {
-    console.log('This is handle submit!!!');
     const contactName = values.name.toLowerCase();
     const isSaved = contacts.find(
       contact => contact.name.toLowerCase() === contactName
