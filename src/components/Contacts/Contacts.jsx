@@ -1,13 +1,11 @@
 import { ContactCard } from '../ContactCard/ContactCard';
 import { List, ListItem } from './Contacts.styled';
-import { deleteContact } from 'redux/contactsSlice';
-import { getContacts, getFilter } from 'redux/selectors';
-import { useSelector, useDispatch } from 'react-redux';
+import { selectContacts, selectFilter } from 'redux/selectors';
+import { useSelector } from 'react-redux';
 
 export const Contacts = () => {
-  const contactList = useSelector(getContacts);
-  const filter = useSelector(getFilter);
-  const dispatch = useDispatch();
+  const contactList = useSelector(selectContacts);
+  const filter = useSelector(selectFilter);
 
   const visibleContacts = filter
     ? contactList.filter(person =>
@@ -17,15 +15,10 @@ export const Contacts = () => {
 
   return (
     <List>
-      {visibleContacts.map(({ name, number, id }) => {
+      {visibleContacts.map(({ name, phone, id }) => {
         return (
           <ListItem key={id}>
-            <ContactCard
-              name={name}
-              number={number}
-              id={id}
-              onDelete={() => dispatch(deleteContact(id))}
-            />
+            <ContactCard name={name} phone={phone} id={id} />
           </ListItem>
         );
       })}

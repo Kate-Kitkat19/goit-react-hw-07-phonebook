@@ -1,13 +1,22 @@
 import { PropTypes } from 'prop-types';
 import { Card, Button, Text, Wrapper } from './ContactCard.styled';
-export const ContactCard = ({ name, number, onDelete }) => {
+import { deleteContact } from 'redux/operations';
+import { useDispatch } from 'react-redux';
+
+export const ContactCard = ({ name, phone, id }) => {
+  const dispatch = useDispatch();
+
+  function deleteItem(id) {
+    dispatch(deleteContact(id));
+  }
+
   return (
     <Card>
       <Wrapper>
         <Text>{name}</Text>
-        <Text>{number}</Text>
+        <Text>{phone}</Text>
       </Wrapper>
-      <Button type="button" onClick={onDelete}>
+      <Button type="button" onClick={() => deleteItem(id)}>
         Delete contact
       </Button>
     </Card>
@@ -16,6 +25,6 @@ export const ContactCard = ({ name, number, onDelete }) => {
 
 ContactCard.propTypes = {
   name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
-  onDelete: PropTypes.func.isRequired,
+  phone: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 };

@@ -4,18 +4,17 @@ import { Button } from './ContactForm.styled';
 import { StyledForm, FormInput, Label, ErrorText } from './ContactForm.styled';
 import { ValidationSchema } from './Validation';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from 'redux/selectors';
-import { nanoid } from 'nanoid';
-import { addContact } from 'redux/contactsSlice';
+import { selectContacts } from 'redux/selectors';
+import { addContact } from 'redux/operations';
 
 export const ContactForm = () => {
   const INITIAL_VALUES = {
     name: '',
-    number: '',
+    phone: '',
   };
 
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
 
   const handleSubmit = (values, { resetForm }) => {
     const contactName = values.name.toLowerCase();
@@ -25,7 +24,7 @@ export const ContactForm = () => {
     if (isSaved) {
       alert(`${values.name} is already in contacts`);
     } else {
-      dispatch(addContact({ ...values, id: nanoid() }));
+      dispatch(addContact(values));
     }
     resetForm();
   };
@@ -44,8 +43,8 @@ export const ContactForm = () => {
         </Label>
         <Label>
           Please write the phone number
-          <FormInput type="tel" name="number"></FormInput>
-          <ErrorMessage name="number" component={ErrorText}></ErrorMessage>
+          <FormInput type="tel" name="phone"></FormInput>
+          <ErrorMessage name="phone" component={ErrorText}></ErrorMessage>
         </Label>
         <Button type="submit">Add contact</Button>
       </StyledForm>
